@@ -3,325 +3,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MZ-Invest | Futuro Financeiro Digital</title>
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <title>AXNINE AI | SISTEMA DE SINAIS PRO</title>
     <style>
-        :root {
-            --primary: #00f2ff; /* Ciano Neon */
-            --secondary: #7000ff; /* Roxo Futurista */
-            --bg: #050508;
-            --surface: #0f111a;
-            --text-main: #ffffff;
-            --text-dim: #94a3b8;
-            --accent-green: #00ff88;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(0, 242, 255, 0.2);
-        }
+        :root { --bg: #0d0d0d; --p: #ff4500; --blue: #3498db; --purple: #9b59b6; --green: #00ff88; }
+        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+        #toast { visibility: hidden; min-width: 280px; background-color: var(--p); color: #fff; text-align: center; border-radius: 12px; padding: 15px; position: fixed; z-index: 1001; top: 30px; font-size: 12px; font-weight: 800; text-transform: uppercase; transition: 0.5s; opacity: 0; }
+        #toast.show { visibility: visible; opacity: 1; top: 20px; } 
+        #global-loader { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; }
+        .spinner-box { width: 60px; height: 60px; border: 4px solid #333; border-top: 4px solid var(--p); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } } 
+        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 999; display: flex; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+        .login-card { width: 100%; max-width: 360px; background: #151515; border-radius: 30px; padding: 40px 30px; border: 1px solid #222; text-align: center; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group label { display: block; font-size: 10px; font-weight: 900; color: #aaa; margin-bottom: 5px; text-transform: uppercase; }
+        .input-group input { width: 100%; background: #000; border: 1px solid #333; padding: 15px; border-radius: 12px; color: white; outline: none; box-sizing: border-box; transition: 0.3s; }
+        .btn-access { width: 100%; padding: 18px; background: var(--p); border: none; border-radius: 12px; color: white; font-weight: 900; cursor: pointer; text-transform: uppercase; } 
+        #main-content { display: none; width: 100%; max-width: 360px; flex-direction: column; align-items: center; }
+        
+        /* Estilo para o novo texto solicitado */
+        .promo-banner { font-size: 11px; font-weight: 800; color: var(--p); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        /* Efeito de Fundo Galáctico */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #050508 100%);
-            z-index: -1;
-        }
-
-        .container { width: 90%; max-width: 1200px; margin: 0 auto; }
-
-        /* Header Futurista */
-        .header {
-            padding: 20px 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            background: rgba(5, 5, 8, 0.8);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .nav { display: flex; justify-content: space-between; align-items: center; }
-        .logo { 
-            font-family: 'Syncopate', sans-serif; 
-            font-size: 1.5rem; 
-            color: var(--primary); 
-            text-decoration: none;
-            letter-spacing: -1px;
-        }
-        .logo span { color: var(--text-main); }
-
-        .nav-links a {
-            color: var(--text-dim);
-            text-decoration: none;
-            margin-left: 30px;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
-        }
-        .nav-links a:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
-
-        /* Hero Section */
-        .hero {
-            padding: 180px 0 100px;
-            display: flex;
-            align-items: center;
-        }
-
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 60px;
-            align-items: center;
-        }
-
-        .hero-content h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-family: 'Syncopate', sans-serif;
-            line-height: 1.1;
-            margin-bottom: 25px;
-            background: linear-gradient(to right, #fff, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-content p {
-            font-size: 1.1rem;
-            color: var(--text-dim);
-            margin-bottom: 35px;
-            max-width: 550px;
-        }
-
-        /* Botões Estilo Tech */
-        .btn {
-            padding: 15px 35px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 700;
-            display: inline-block;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.8rem;
-            transition: 0.4s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-main {
-            background: var(--primary);
-            color: #000;
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
-        }
-
-        .btn-main:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.6);
-        }
-
-        /* Dashboard de Rendimentos MZ */
-        .glass-panel {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-
-        .payment-icons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            opacity: 0.8;
-        }
-
-        .pay-badge {
-            background: rgba(255,255,255,0.05);
-            padding: 5px 12px;
-            border-radius: 5px;
-            font-size: 0.7rem;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        /* Features */
-        .section-padding { padding: 100px 0; }
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-
-        .tech-card {
-            background: var(--glass);
-            padding: 40px;
-            border-left: 3px solid var(--primary);
-            transition: 0.3s;
-        }
-
-        .tech-card:hover {
-            background: rgba(255,255,255,0.06);
-            transform: translateX(10px);
-        }
-
-        .tech-card i { font-size: 2rem; color: var(--primary); margin-bottom: 20px; }
-
-        /* Accordion */
-        .accordion-item { border-bottom: 1px solid var(--border); margin-bottom: 10px; }
-        .acc-btn {
-            width: 100%; padding: 20px; background: none; border: none; color: #fff;
-            display: flex; justify-content: space-between; cursor: pointer; font-size: 1rem;
-            font-weight: 600;
-        }
-        .acc-panel { max-height: 0; overflow: hidden; transition: 0.4s ease; color: var(--text-dim); }
-
-        /* Footer MZ */
-        .footer { padding: 80px 0 30px; border-top: 1px solid var(--border); }
-        .risk-alert { font-size: 0.75rem; color: #f87171; text-align: center; margin-top: 40px; opacity: 0.8; }
-
-        /* Animações */
-        .reveal { opacity: 0; transform: translateY(30px); transition: 0.6s ease-out; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-
-        @media (max-width: 992px) {
-            .hero-grid { grid-template-columns: 1fr; text-align: center; }
-            .hero-content p { margin: 0 auto 35px; }
-            .nav-links { display: none; }
-        }
+        .active-users { font-size: 10px; font-weight: 900; color: var(--green); margin-bottom: 10px; text-transform: uppercase; } 
+        .scoreboard { width: 100%; display: flex; justify-content: space-around; background: #000; padding: 10px; border-radius: 20px; border: 1px solid #222; margin-bottom: 10px; }
+        .card { width: 100%; background: #151515; border-radius: 40px; padding: 30px; border: 1px solid #222; text-align: center; box-sizing: border-box; }
+        .signal-container { position: relative; margin: 25px 0; padding: 4px; border-radius: 28px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .signal-container::before { content: ''; position: absolute; width: 150%; height: 150%; background: conic-gradient(transparent, var(--p), transparent); animation: rotate-border 4s linear infinite; }
+        .signal-container.blue-mode::before { background: conic-gradient(transparent, var(--blue), transparent); }
+        .signal-container.purple-mode::before { background: conic-gradient(transparent, var(--purple), transparent); }
+        @keyframes rotate-border { 100% { transform: rotate(360deg); } } 
+        .signal-display { position: relative; z-index: 1; width: 100%; min-height: 140px; border-radius: 25px; background: #000; display: flex; flex-direction: column; justify-content: center; }
+        .val { font-size: 60px; font-weight: 900; display: block; line-height: 1; margin: 10px 0; color: var(--p) !important; }
+        .signal-container.blue-mode .val { color: var(--blue) !important; }
+        .signal-container.purple-mode .val { color: var(--purple) !important; } 
+        #inner-loader { display: none; align-items: center; justify-content: center; flex-direction: column; }
+        .radiant-circle { width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--p); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .proc-text { margin-top: 10px; font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: var(--p); } 
+        .btn-affiliate { display: block; width: 100%; padding: 20px; margin: 20px 0; background: linear-gradient(90deg, #ff4500, #ff8c00); color: white; text-decoration: none; border-radius: 20px; font-weight: 900; font-size: 16px; text-transform: uppercase; border: none; cursor: pointer; position: relative; }
+        .btn-loading { color: transparent !important; pointer-events: none; }
+        .btn-loading::after { content: ""; position: absolute; width: 20px; height: 20px; top: 50%; left: 50%; margin: -10px 0 0 -10px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; }
+        .info-row { display: flex; justify-content: space-between; margin: 15px 0; gap: 10px; }
+        .info-box { flex: 1; background: #1a1a1a; padding: 15px; border-radius: 20px; border: 1px solid #252525; text-align: center; }
+        .info-label { font-size: 8px; color: #aaa; font-weight: 900; display: block; margin-bottom: 4px; }
+        .btn-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .btn-win { flex: 1; padding: 15px; border-radius: 12px; background: var(--green); border: none; font-weight: 900; color: #000; cursor: pointer; }
+        .stats-footer { width: 100%; margin-top: 25px; padding-top: 20px; border-top: 1px solid #222; }
+        .stats-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .stats-table th { font-size: 8px; color: #555; text-transform: uppercase; padding: 5px; }
+        .stats-table td { background: #111; border: 2px solid var(--bg); padding: 12px 5px; border-radius: 10px; text-align: center; }
+        .stat-win { font-size: 14px; font-weight: 900; color: var(--green); }
+        .period-label { font-size: 8px; font-weight: 900; color: #777; text-transform: uppercase; } 
+        .tentativas-badge { background: #222; padding: 6px 15px; border-radius: 50px; font-size: 11px; font-weight: 900; color: #fff; border: 1px solid #333; margin-top: 5px; display: inline-block; }
+        .instrucoes { font-size: 10px; color: #666; margin-top: 8px; line-height: 1.4; padding: 0 15px; }
     </style>
 </head>
-<body>
+<body> 
 
-    <header class="header">
-        <div class="container nav">
-            <a href="#" class="logo">MZ-<span>INVEST</span></a>
-            <div class="nav-links">
-                <a href="#como-funciona">Protocolo</a>
-                <a href="#seguranca">Segurança</a>
-                <a href="#faq">Suporte</a>
-                <a href="#" class="btn btn-main" style="padding: 8px 20px; margin-left: 20px;">Entrar</a>
+    <div id="toast">Aviso</div> 
+
+    <div id="global-loader">
+        <div class="spinner-box"></div>
+        <div style="color:white; margin-top:10px; font-size: 12px; font-weight: 900;">CONECTANDO...</div>
+    </div> 
+
+    <div id="login-overlay">
+        <div class="login-card">
+            <h2 style="color:var(--p)">AVIATOR AI</h2>
+            <div class="input-group">
+                <label>Nome de Usuário</label>
+                <input type="text" id="user-name" placeholder="Ex: Axnine" maxlength="12">
+            </div>
+            <div class="input-group">
+                <label>Número WhatsApp</label>
+                <input type="tel" id="user-phone" placeholder="84XXXXXXX" maxlength="9">
+            </div>
+            <button class="btn-access" onclick="acessarSistema()">Acessar Painel VIP</button>
+        </div>
+    </div> 
+
+    <div id="main-content">
+        <!-- TEXTO ADICIONADO AQUI -->
+        <div class="promo-banner">DEPOSITA 1000MT E GANHA 2000MT INSTANTEMENTE</div>
+        
+        <div class="active-users">● <span id="online-count">0</span> Ativo</div> 
+        <div class="scoreboard">
+            <div style="text-align:center"><span style="font-size:9px">ACERTO HOJE</span><br><span id="w" style="color:var(--green); font-weight:900">0</span></div>
+        </div> 
+        <div class="card">
+            <h3 style="color:var(--p); margin: 5px 0 15px 0; font-size: 16px;">SISTEMA DE SINAIS VIP AVIATOR</h3>
+            <div class="signal-container" id="border-box">
+                <div class="signal-display">
+                    <div id="inner-loader">
+                        <div class="radiant-circle"></div>
+                        <span class="proc-text" id="loader-msg">ANALISANDO...</span>
+                    </div>
+                    <div id="signal-data">
+                        <span style="font-size:12px; font-weight:900; opacity:0.7">SACAR EM (CASH OUT)</span>
+                        <span class="val" id="mult">--.--X</span>
+                        <span id="time" style="font-weight:700">ENTRADA: --:--</span>
+                    </div>
+                </div>
+            </div> 
+            <div class="tentativas-badge">3 TENTATIVAS</div>
+            <p class="instrucoes">Se uma das 3 tentativas ganhar a rodada é considerado vencido.</p>
+            <button class="btn-affiliate" id="btn-bet" onclick="irParaBanca()">APOSTAR AGORA 🚀</button> 
+            <div class="info-row">
+                <div class="info-box"><span class="info-label">Provavel</span><span id="prot-color" style="font-weight:900">---</span></div>
+                <div class="info-box"><span class="info-label">Taxa de Acerto</span><span id="assert-val" style="font-weight:900">94%</span></div>
+            </div> 
+            <div class="btn-group">
+                <button class="btn-win" onclick="votar('win')">ACERTOU ✅</button>
+            </div>
+            <div id="timer-text" style="font-size:11px; color:var(--p); margin-bottom: 15px; font-weight: 800;">AGUARDANDO SERVIDOR...</div> 
+            <div class="stats-footer">
+                <table class="stats-table">
+                    <tr><th colspan="2">RELATÓRIO DE SINAIS</th></tr>
+                    <tr><td class="period-label">Hoje</td><td class="stat-win" id="win-today">+0</td></tr>
+                    <tr><td class="period-label">Semana</td><td class="stat-win" id="win-week">+0</td></tr>
+                    <tr><td class="period-label">Mensal</td><td class="stat-win" id="win-month">+0</td></tr>
+                </table>
             </div>
         </div>
-    </header>
+    </div> 
 
-    <main>
-        <section class="hero">
-            <div class="container hero-grid">
-                <div class="hero-content reveal">
-                    <h1>O Futuro do seu <br>Capital em Moçambique.</h1>
-                    <p>Invista em mercados globais com liquidez local. Tecnologia inteligente para gerir rendimentos de forma automática e segura.</p>
-                    <div class="hero-actions">
-                        <a href="#" class="btn btn-main">Criar Conta Digital</a>
-                    </div>
-                </div>
-                
-                <div class="hero-dashboard reveal">
-                    <div class="glass-panel">
-                        <p style="color: var(--primary); font-size: 0.8rem; font-weight: bold;">BALANÇO EM TEMPO REAL</p>
-                        <h2 style="font-size: 2.5rem; margin: 10px 0;">150.420,00 <span style="font-size: 1rem; color: var(--text-dim);">MTN</span></h2>
-                        <div style="display: flex; justify-content: space-between; margin-top: 20px;">
-                            <div><p style="font-size: 0.7rem;">LUCRO HOJE</p><p style="color: var(--accent-green);">+2.150 MTN</p></div>
-                            <div style="text-align: right;"><p style="font-size: 0.7rem;">STATUS</p><p style="color: var(--primary);">ATIVO</p></div>
-                        </div>
-                        <div class="payment-icons">
-                            <span class="pay-badge">M-PESA</span>
-                            <span class="pay-badge">E-MOLA</span>
-                            <span class="pay-badge">SIMO</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Seção Profissional Tech -->
-        <section class="section-padding" id="como-funciona">
-            <div class="container">
-                <div class="grid-3">
-                    <div class="tech-card reveal">
-                        <i class="fas fa-microchip"></i>
-                        <h3>IA de Gestão</h3>
-                        <p>Algoritmos que analisam o mercado 24/7 para otimizar os seus lucros automaticamente.</p>
-                    </div>
-                    <div class="tech-card reveal">
-                        <i class="fas fa-bolt"></i>
-                        <h3>Saques Rápidos</h3>
-                        <p>Retire os seus fundos via M-Pesa ou Banco em menos de 15 minutos.</p>
-                    </div>
-                    <div class="tech-card reveal">
-                        <i class="fas fa-fingerprint"></i>
-                        <h3>Segurança Máxima</h3>
-                        <p>Autenticação de dois fatores e criptografia de ponta para proteger os seus dados.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FAQ -->
-        <section class="section-padding" id="faq">
-            <div class="container" style="max-width: 800px;">
-                <h2 style="text-align: center; margin-bottom: 40px; font-family: 'Syncopate';">Perguntas Frequentes</h2>
-                <div class="accordion">
-                    <div class="accordion-item reveal">
-                        <button class="acc-btn">Qual é o investimento mínimo? <i class="fas fa-plus"></i></button>
-                        <div class="acc-panel"><p style="padding: 0 20px 20px;">Pode começar com apenas 1.000 MTN para testar a nossa tecnologia.</p></div>
-                    </div>
-                    <div class="accordion-item reveal">
-                        <button class="acc-btn">Como recebo o meu dinheiro? <i class="fas fa-plus"></i></button>
-                        <div class="acc-panel"><p style="padding: 0 20px 20px;">Os pagamentos são feitos diretamente para o seu número M-Pesa, e-Mola ou conta bancária registada.</p></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <div class="container text-center">
-            <a href="#" class="logo">MZ-<span>INVEST</span></a>
-            <p style="color: var(--text-dim); margin-top: 20px;">Maputo, Moçambique | Suporte: +258 84 000 0000</p>
-            <div class="risk-alert">
-                ATENÇÃO: Resultados passados não garantem lucros futuros. O mercado financeiro possui riscos. Invista apenas o capital destinado a investimentos.
-            </div>
-            <p style="font-size: 0.8rem; margin-top: 20px; color: var(--text-dim);">&copy; 2026 MZ-Invest Digital Group.</p>
-        </div>
-    </footer>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script> 
 
     <script>
-        // Animação de Entrada
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('active');
+        const URL_GOOGLE_SHEETS = "https://script.google.com/macros/s/AKfycbyXhSdR5OMeCgcNg4ljsYY81FkZJo7twt1VpPAOUVNgjg7xH4RahQscgAm-HN_9sh5_Dw/exec";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA3_1btxboCFxCcCJ4EaO4LPOnnYaV6F8o",
+            databaseURL: "https://axnine-45d25-default-rtdb.firebaseio.com",
+            projectId: "axnine-45d25",
+            appId: "1:714660717180:web:86e2467d3b376c6c64188b"
+        }; 
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const sinalRef = db.ref('sinal_global');
+        const statsRef = db.ref('estatisticas_globais');
+        const onlineRef = db.ref('usuarios_online');
+
+        let timerInterval;
+        let isProcessing = false;
+        let serverOffset = 0;
+        let ultimoSinalId = null;
+
+        db.ref(".info/serverTimeOffset").on("value", snap => { serverOffset = snap.val() || 0; });
+        function getNow() { return Date.now() + serverOffset; }
+
+        function showToast(msg) {
+            const t = document.getElementById("toast");
+            t.innerText = msg; t.className = "show";
+            setTimeout(() => { t.className = ""; }, 4000);
+        }
+
+        function verificarPermissaoNotificacao() {
+            if (!("Notification" in window)) return;
+            if (Notification.permission === "default") {
+                Notification.requestPermission();
+            } else if (Notification.permission === "denied") {
+                showToast("ATIVE AS NOTIFICAÇÕES PARA RECEBER OS SINAIS!");
+            }
+        }
+
+        async function acessarSistema() {
+            const nome = document.getElementById('user-name').value.trim();
+            const fone = document.getElementById('user-phone').value.trim();
+
+            if (nome.length < 3 || !/^8[2-7]\d{7}$/.test(fone)) {
+                showToast("DADOS INVÁLIDOS!");
+                return;
+            }
+
+            verificarPermissaoNotificacao();
+            document.getElementById('global-loader').style.display = 'flex';
+
+            try {
+                await fetch(URL_GOOGLE_SHEETS, {
+                    method: "POST", 
+                    mode: "no-cors",
+                    body: JSON.stringify({ 
+                        nome: nome, 
+                        telefone: fone, 
+                        data: new Date().toLocaleString("pt-MZ", {timeZone: "Africa/Maputo"}) 
+                    })
+                });
+            } catch(e) { console.log("Erro sheets:", e); }
+
+            const pRef = onlineRef.push();
+            pRef.set(true);
+            pRef.onDisconnect().remove(); 
+
+            setTimeout(() => {
+                document.getElementById('global-loader').style.display = 'none';
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('main-content').style.display = 'flex';
+                ouvirSinais();
+            }, 1500);
+        }
+
+        function ouvirSinais() {
+            onlineRef.on('value', s => { document.getElementById('online-count').innerText = s.numChildren(); });
+            
+            statsRef.on('value', s => {
+                const d = s.val() || { wins: 0, losses: 0 };
+                document.getElementById('w').innerText = d.wins;
+                document.getElementById('win-today').innerText = "+" + d.wins;
             });
-        }, { threshold: 0.1 });
 
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // Accordion
-        document.querySelectorAll('.acc-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const panel = this.nextElementSibling;
-                const icon = this.querySelector('i');
-                if (panel.style.maxHeight) {
-                    panel.style.maxHeight = null;
-                    icon.className = 'fas fa-plus';
+            sinalRef.on('value', snap => {
+                const data = snap.val();
+                const agora = getNow();
+                if (!data || agora >= data.expira) {
+                    if (!isProcessing) processarNovoSinal();
                 } else {
-                    document.querySelectorAll('.acc-panel').forEach(p => p.style.maxHeight = null);
-                    document.querySelectorAll('.acc-btn i').forEach(i => i.className = 'fas fa-plus');
-                    panel.style.maxHeight = panel.scrollHeight + "px";
-                    icon.className = 'fas fa-minus';
+                    isProcessing = false;
+                    atualizarTela(data);
                 }
             });
-        });
+        }
+
+        function processarNovoSinal() {
+            isProcessing = true;
+            document.getElementById('signal-data').style.display = 'none';
+            document.getElementById('inner-loader').style.display = 'flex';
+            let count = 5;
+            const pTimer = setInterval(() => {
+                count--;
+                document.getElementById('loader-msg').innerText = "IDENTIFICANDO... " + count + "s";
+                if(count <= 0) {
+                    clearInterval(pTimer);
+                    gerarSinalFinal();
+                }
+            }, 1000);
+        }
+
+        function gerarSinalFinal() {
+            const agora = getNow();
+            const h = new Date(agora + 60000).getHours().toString().padStart(2,'0') + ":" + new Date(agora + 60000).getMinutes().toString().padStart(2,'0');
+            const random = Math.random();
+            let v = (random > 0.8) ? (Math.random() * 1.5 + 3).toFixed(2) : (random > 0.5 ? (Math.random() * 0.9 + 2).toFixed(2) : (Math.random() * 0.6 + 1.3).toFixed(2));
+            sinalRef.set({ valor: v, hora: h, assert: Math.floor(Math.random() * 6) + 90, expira: agora + 90000 });
+        }
+
+        function atualizarTela(data) {
+            document.getElementById('inner-loader').style.display = 'none';
+            document.getElementById('signal-data').style.display = 'block';
+            document.getElementById('mult').innerText = data.valor + "X";
+            document.getElementById('time').innerText = "ENTRADA: " + data.hora;
+            document.getElementById('assert-val').innerText = data.assert + "%";
+            
+            if (ultimoSinalId !== data.expira) {
+                if ("Notification" in window && Notification.permission === "granted") {
+                    new Notification("🚀 NOVO SINAL AXNINE", {
+                        body: `SAIR EM: ${data.valor}X | HORA: ${data.hora}`,
+                        icon: 'https://cdn-icons-png.flaticon.com/512/732/732200.png'
+                    });
+                }
+                ultimoSinalId = data.expira;
+            }
+
+            const box = document.getElementById('border-box');
+            const prot = document.getElementById('prot-color');
+            if (parseFloat(data.valor) < 2.0) {
+                box.className = "signal-container blue-mode";
+                prot.innerText = "AZUL"; prot.style.color = "var(--blue)";
+            } else {
+                box.className = "signal-container purple-mode";
+                prot.innerText = "ROXA"; prot.style.color = "var(--purple)";
+            }
+            iniciarContagem(data.expira);
+        }
+
+        function iniciarContagem(expira) {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                const agora = getNow();
+                const restante = Math.max(0, Math.floor((expira - agora) / 1000));
+                document.getElementById('timer-text').innerText = "PRÓXIMO SINAL EM: " + restante + "s";
+                if (restante <= 0 && !isProcessing) processarNovoSinal();
+            }, 1000);
+        }
+
+        function votar(tipo) {
+            statsRef.transaction(a => { if(!a) a = { wins: 0, losses: 0 }; tipo === 'win' ? a.wins++ : a.losses++; return a; });
+            showToast("RESULTADO COMPUTADO!");
+        }
+
+        function irParaBanca() {
+            const btn = document.getElementById('btn-bet');
+            btn.classList.add('btn-loading');
+            setTimeout(() => {
+                btn.classList.remove('btn-loading');
+                window.open("https://media1.placard.co.mz/redirect.aspx?pid=3489&bid=1514", "_blank");
+            }, 1500);
+        }
     </script>
 </body>
 </html>
