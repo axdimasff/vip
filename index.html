@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MZ-Invest | Futuro Financeiro Digital</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #00f2ff; /* Ciano Neon */
+            --secondary: #7000ff; /* Roxo Futurista */
+            --bg: #050508;
+            --surface: #0f111a;
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --accent-green: #00ff88;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(0, 242, 255, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Efeito de Fundo Galáctico */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #050508 100%);
+            z-index: -1;
+        }
+
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; }
+
+        /* Header Futurista */
+        .header {
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(5, 5, 8, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { 
+            font-family: 'Syncopate', sans-serif; 
+            font-size: 1.5rem; 
+            color: var(--primary); 
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+        .logo span { color: var(--text-main); }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+
+        /* Hero Section */
+        .hero {
+            padding: 180px 0 100px;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-family: 'Syncopate', sans-serif;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            background: linear-gradient(to right, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            margin-bottom: 35px;
+            max-width: 550px;
+        }
+
+        /* Botões Estilo Tech */
+        .btn {
+            padding: 15px 35px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-main {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+        }
+
+        .btn-main:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.6);
+        }
+
+        /* Dashboard de Rendimentos MZ */
+        .glass-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .payment-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            opacity: 0.8;
+        }
+
+        .pay-badge {
+            background: rgba(255,255,255,0.05);
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Features */
+        .section-padding { padding: 100px 0; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+
+        .tech-card {
+            background: var(--glass);
+            padding: 40px;
+            border-left: 3px solid var(--primary);
+            transition: 0.3s;
+        }
+
+        .tech-card:hover {
+            background: rgba(255,255,255,0.06);
+            transform: translateX(10px);
+        }
+
+        .tech-card i { font-size: 2rem; color: var(--primary); margin-bottom: 20px; }
+
+        /* Accordion */
+        .accordion-item { border-bottom: 1px solid var(--border); margin-bottom: 10px; }
+        .acc-btn {
+            width: 100%; padding: 20px; background: none; border: none; color: #fff;
+            display: flex; justify-content: space-between; cursor: pointer; font-size: 1rem;
+            font-weight: 600;
+        }
+        .acc-panel { max-height: 0; overflow: hidden; transition: 0.4s ease; color: var(--text-dim); }
+
+        /* Footer MZ */
+        .footer { padding: 80px 0 30px; border-top: 1px solid var(--border); }
+        .risk-alert { font-size: 0.75rem; color: #f87171; text-align: center; margin-top: 40px; opacity: 0.8; }
+
+        /* Animações */
+        .reveal { opacity: 0; transform: translateY(30px); transition: 0.6s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 992px) {
+            .hero-grid { grid-template-columns: 1fr; text-align: center; }
+            .hero-content p { margin: 0 auto 35px; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="container nav">
+            <a href="#" class="logo">MZ-<span>INVEST</span></a>
+            <div class="nav-links">
+                <a href="#como-funciona">Protocolo</a>
+                <a href="#seguranca">Segurança</a>
+                <a href="#faq">Suporte</a>
+                <a href="#" class="btn btn-main" style="padding: 8px 20px; margin-left: 20px;">Entrar</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container hero-grid">
+                <div class="hero-content reveal">
+                    <h1>O Futuro do seu <br>Capital em Moçambique.</h1>
+                    <p>Invista em mercados globais com liquidez local. Tecnologia inteligente para gerir rendimentos de forma automática e segura.</p>
+                    <div class="hero-actions">
+                        <a href="#" class="btn btn-main">Criar Conta Digital</a>
+                    </div>
+                </div>
+                
+                <div class="hero-dashboard reveal">
+                    <div class="glass-panel">
+                        <p style="color: var(--primary); font-size: 0.8rem; font-weight: bold;">BALANÇO EM TEMPO REAL</p>
+                        <h2 style="font-size: 2.5rem; margin: 10px 0;">150.420,00 <span style="font-size: 1rem; color: var(--text-dim);">MTN</span></h2>
+                        <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                            <div><p style="font-size: 0.7rem;">LUCRO HOJE</p><p style="color: var(--accent-green);">+2.150 MTN</p></div>
+                            <div style="text-align: right;"><p style="font-size: 0.7rem;">STATUS</p><p style="color: var(--primary);">ATIVO</p></div>
+                        </div>
+                        <div class="payment-icons">
+                            <span class="pay-badge">M-PESA</span>
+                            <span class="pay-badge">E-MOLA</span>
+                            <span class="pay-badge">SIMO</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Profissional Tech -->
+        <section class="section-padding" id="como-funciona">
+            <div class="container">
+                <div class="grid-3">
+                    <div class="tech-card reveal">
+                        <i class="fas fa-microchip"></i>
+                        <h3>IA de Gestão</h3>
+                        <p>Algoritmos que analisam o mercado 24/7 para otimizar os seus lucros automaticamente.</p>
+                    </div>
+                    <div class="tech-card reveal">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Saques Rápidos</h3>
+                        <p>Retire os seus fundos via M-Pesa ou Banco em menos de 15 minutos.</p>
+                    </div>
+                    <div class="tech-card reveal">
+                        <i class="fas fa-fingerprint"></i>
+                        <h3>Segurança Máxima</h3>
+                        <p>Autenticação de dois fatores e criptografia de ponta para proteger os seus dados.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section-padding" id="faq">
+            <div class="container" style="max-width: 800px;">
+                <h2 style="text-align: center; margin-bottom: 40px; font-family: 'Syncopate';">Perguntas Frequentes</h2>
+                <div class="accordion">
+                    <div class="accordion-item reveal">
+                        <button class="acc-btn">Qual é o investimento mínimo? <i class="fas fa-plus"></i></button>
+                        <div class="acc-panel"><p style="padding: 0 20px 20px;">Pode começar com apenas 1.000 MTN para testar a nossa tecnologia.</p></div>
+                    </div>
+                    <div class="accordion-item reveal">
+                        <button class="acc-btn">Como recebo o meu dinheiro? <i class="fas fa-plus"></i></button>
+                        <div class="acc-panel"><p style="padding: 0 20px 20px;">Os pagamentos são feitos diretamente para o seu número M-Pesa, e-Mola ou conta bancária registada.</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <a href="#" class="logo">MZ-<span>INVEST</span></a>
+            <p style="color: var(--text-dim); margin-top: 20px;">Maputo, Moçambique | Suporte: +258 84 000 0000</p>
+            <div class="risk-alert">
+                ATENÇÃO: Resultados passados não garantem lucros futuros. O mercado financeiro possui riscos. Invista apenas o capital destinado a investimentos.
+            </div>
+            <p style="font-size: 0.8rem; margin-top: 20px; color: var(--text-dim);">&copy; 2026 MZ-Invest Digital Group.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Animação de Entrada
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Accordion
+        document.querySelectorAll('.acc-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const panel = this.nextElementSibling;
+                const icon = this.querySelector('i');
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                    icon.className = 'fas fa-plus';
+                } else {
+                    document.querySelectorAll('.acc-panel').forEach(p => p.style.maxHeight = null);
+                    document.querySelectorAll('.acc-btn i').forEach(i => i.className = 'fas fa-plus');
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                    icon.className = 'fas fa-minus';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
