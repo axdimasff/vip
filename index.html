@@ -3,302 +3,314 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AXNINE AI | SISTEMA DE SINAIS PRO</title>
+    <title>Gemgala MZ - Renda Extra</title>
     <style>
-        :root { --bg: #0d0d0d; --p: #ff4500; --blue: #3498db; --purple: #9b59b6; --green: #00ff88; }
-        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
-        #toast { visibility: hidden; min-width: 280px; background-color: var(--p); color: #fff; text-align: center; border-radius: 12px; padding: 15px; position: fixed; z-index: 1001; top: 30px; font-size: 12px; font-weight: 800; text-transform: uppercase; transition: 0.5s; opacity: 0; }
-        #toast.show { visibility: visible; opacity: 1; top: 20px; } 
-        #global-loader { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; }
-        .spinner-box { width: 60px; height: 60px; border: 4px solid #333; border-top: 4px solid var(--p); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } } 
-        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 999; display: flex; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
-        .login-card { width: 100%; max-width: 360px; background: #151515; border-radius: 30px; padding: 40px 30px; border: 1px solid #222; text-align: center; }
-        .input-group { margin-bottom: 15px; text-align: left; }
-        .input-group label { display: block; font-size: 10px; font-weight: 900; color: #aaa; margin-bottom: 5px; text-transform: uppercase; }
-        .input-group input { width: 100%; background: #000; border: 1px solid #333; padding: 15px; border-radius: 12px; color: white; outline: none; box-sizing: border-box; transition: 0.3s; }
-        .btn-access { width: 100%; padding: 18px; background: var(--p); border: none; border-radius: 12px; color: white; font-weight: 900; cursor: pointer; text-transform: uppercase; } 
-        #main-content { display: none; width: 100%; max-width: 360px; flex-direction: column; align-items: center; }
-        
-        /* Estilo para o novo texto solicitado */
-        .promo-banner { font-size: 11px; font-weight: 800; color: var(--p); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
+        :root {
+            --primary: #8a2be2;
+            --secondary: #00f2ff;
+            --dark: #0a0b10;
+            --card: #161b22;
+            --text: #ffffff;
+            --accent: #ffcc00;
+            --aviator: #ff003c; /* Cor de destaque para o botão do Aviator */
+        }
 
-        .active-users { font-size: 10px; font-weight: 900; color: var(--green); margin-bottom: 10px; text-transform: uppercase; } 
-        .scoreboard { width: 100%; display: flex; justify-content: space-around; background: #000; padding: 10px; border-radius: 20px; border: 1px solid #222; margin-bottom: 10px; }
-        .card { width: 100%; background: #151515; border-radius: 40px; padding: 30px; border: 1px solid #222; text-align: center; box-sizing: border-box; }
-        .signal-container { position: relative; margin: 25px 0; padding: 4px; border-radius: 28px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .signal-container::before { content: ''; position: absolute; width: 150%; height: 150%; background: conic-gradient(transparent, var(--p), transparent); animation: rotate-border 4s linear infinite; }
-        .signal-container.blue-mode::before { background: conic-gradient(transparent, var(--blue), transparent); }
-        .signal-container.purple-mode::before { background: conic-gradient(transparent, var(--purple), transparent); }
-        @keyframes rotate-border { 100% { transform: rotate(360deg); } } 
-        .signal-display { position: relative; z-index: 1; width: 100%; min-height: 140px; border-radius: 25px; background: #000; display: flex; flex-direction: column; justify-content: center; }
-        .val { font-size: 60px; font-weight: 900; display: block; line-height: 1; margin: 10px 0; color: var(--p) !important; }
-        .signal-container.blue-mode .val { color: var(--blue) !important; }
-        .signal-container.purple-mode .val { color: var(--purple) !important; } 
-        #inner-loader { display: none; align-items: center; justify-content: center; flex-direction: column; }
-        .radiant-circle { width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--p); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        .proc-text { margin-top: 10px; font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: var(--p); } 
-        .btn-affiliate { display: block; width: 100%; padding: 20px; margin: 20px 0; background: linear-gradient(90deg, #ff4500, #ff8c00); color: white; text-decoration: none; border-radius: 20px; font-weight: 900; font-size: 16px; text-transform: uppercase; border: none; cursor: pointer; position: relative; }
-        .btn-loading { color: transparent !important; pointer-events: none; }
-        .btn-loading::after { content: ""; position: absolute; width: 20px; height: 20px; top: 50%; left: 50%; margin: -10px 0 0 -10px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; }
-        .info-row { display: flex; justify-content: space-between; margin: 15px 0; gap: 10px; }
-        .info-box { flex: 1; background: #1a1a1a; padding: 15px; border-radius: 20px; border: 1px solid #252525; text-align: center; }
-        .info-label { font-size: 8px; color: #aaa; font-weight: 900; display: block; margin-bottom: 4px; }
-        .btn-group { display: flex; gap: 10px; margin-bottom: 20px; }
-        .btn-win { flex: 1; padding: 15px; border-radius: 12px; background: var(--green); border: none; font-weight: 900; color: #000; cursor: pointer; }
-        .stats-footer { width: 100%; margin-top: 25px; padding-top: 20px; border-top: 1px solid #222; }
-        .stats-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        .stats-table th { font-size: 8px; color: #555; text-transform: uppercase; padding: 5px; }
-        .stats-table td { background: #111; border: 2px solid var(--bg); padding: 12px 5px; border-radius: 10px; text-align: center; }
-        .stat-win { font-size: 14px; font-weight: 900; color: var(--green); }
-        .period-label { font-size: 8px; font-weight: 900; color: #777; text-transform: uppercase; } 
-        .tentativas-badge { background: #222; padding: 6px 15px; border-radius: 50px; font-size: 11px; font-weight: 900; color: #fff; border: 1px solid #333; margin-top: 5px; display: inline-block; }
-        .instrucoes { font-size: 10px; color: #666; margin-top: 8px; line-height: 1.4; padding: 0 15px; }
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--dark);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px 0;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 450px;
+            padding: 25px;
+            background: var(--card);
+            border-radius: 24px;
+            box-shadow: 0 0 40px rgba(138, 43, 226, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .logo-area h1 {
+            font-size: 2.4rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .reward-badge {
+            background: rgba(0, 242, 255, 0.1);
+            border: 1px solid var(--secondary);
+            padding: 12px;
+            border-radius: 12px;
+            margin: 15px 0;
+            font-weight: bold;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+        }
+
+        .steps {
+            text-align: left;
+            margin: 25px 0;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            transition: 0.3s;
+        }
+
+        .step-item:hover {
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .step-num {
+            background: var(--primary);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* --- VÍDEO --- */
+        .video-label {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin: 20px 0 12px 0;
+            display: block;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .video-container-yt {
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid var(--secondary);
+            position: relative;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            margin-bottom: 30px;
+        }
+
+        .video-placeholder {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .video-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+        }
+
+        .play-button {
+            position: absolute;
+            width: 55px;
+            height: 55px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 3px solid #fff;
+            z-index: 2;
+        }
+
+        .play-button::before {
+            content: '';
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 18px solid white;
+            margin-left: 5px;
+        }
+
+        /* --- BOTÕES DO BANCO (DOWNLOAD E AVIATOR) --- */
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 15px; /* Espaço entre os botões */
+            margin: 20px 0;
+        }
+
+        .btn-wrapper {
+            position: relative;
+            display: inline-block;
+            padding: 3px;
+            border-radius: 50px;
+            overflow: hidden;
+            z-index: 1;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .btn-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, var(--secondary), var(--primary), transparent 40%);
+            animation: rotate 3s linear infinite;
+            z-index: -2;
+        }
+
+        /* Efeito de rotação específico para as cores do Aviator */
+        .btn-wrapper.aviator-style::before {
+            background: conic-gradient(transparent, var(--accent), var(--aviator), transparent 40%);
+        }
+
+        .btn-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            background: var(--card);
+            border-radius: 50px;
+            z-index: -1;
+        }
+
+        .btn-download {
+            display: block;
+            padding: 20px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(138, 43, 226, 0.3);
+        }
+
+        /* Estilo do botão do Aviator */
+        .btn-download.aviator-btn {
+            background: linear-gradient(45deg, var(--aviator), var(--accent));
+            color: white;
+            font-size: 1.05rem; /* Leve ajuste para caber o texto maior confortavelmente */
+            box-shadow: 0 10px 20px rgba(255, 0, 60, 0.3);
+        }
+
+        .btn-download:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.1);
+        }
+
+        .btn-download:active {
+            transform: scale(0.95);
+        }
+
+        /* --- NOTA IMPORTANTE FINAL --- */
+        .final-warning {
+            background: rgba(255, 204, 0, 0.1);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        .play-button::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--secondary);
+            animation: pulse 2s infinite;
+        }
     </style>
 </head>
-<body> 
+<body>
 
-    <div id="toast">Aviso</div> 
+<div class="container">
+    <div class="logo-area">
+        <h1>Parabéns Ganhou 21000MT</h1>
+        <p style="opacity: 0.8; font-size: 0.95rem;">Siga as orientações abaixo para receber sua recompensa e sacar via Mpesa ou Emola.</p>
+    </div>
 
-    <div id="global-loader">
-        <div class="spinner-box"></div>
-        <div style="color:white; margin-top:10px; font-size: 12px; font-weight: 900;">CONECTANDO...</div>
-    </div> 
+    <div class="reward-badge">
+        🎁 ATENÇÃO: SIGA OS PASSOS PARA RECEBER 21000MT
+    </div>
 
-    <div id="login-overlay">
-        <div class="login-card">
-            <h2 style="color:var(--p)">AVIATOR AI</h2>
-            <div class="input-group">
-                <label>Nome de Usuário</label>
-                <input type="text" id="user-name" placeholder="Ex: Axnine" maxlength="12">
-            </div>
-            <div class="input-group">
-                <label>Número WhatsApp</label>
-                <input type="tel" id="user-phone" placeholder="84XXXXXXX" maxlength="9">
-            </div>
-            <button class="btn-access" onclick="acessarSistema()">Acessar Painel VIP</button>
+    <div class="steps">
+        <div class="step-item">
+            <div class="step-num">1</div>
+            <div><strong>Criar Nova Conta:</strong> Cria uma nova conta para receber o dinhero.</div>
         </div>
-    </div> 
-
-    <div id="main-content">
-        <!-- TEXTO ADICIONADO AQUI -->
-        <div class="promo-banner">DEPOSITA 1000MT E GANHA 2000MT INSTANTEMENTE</div>
-        
-        <div class="active-users">● <span id="online-count">0</span> Ativo</div> 
-        <div class="scoreboard">
-            <div style="text-align:center"><span style="font-size:9px">ACERTO HOJE</span><br><span id="w" style="color:var(--green); font-weight:900">0</span></div>
-        </div> 
-        <div class="card">
-            <h3 style="color:var(--p); margin: 5px 0 15px 0; font-size: 16px;">SISTEMA DE SINAIS VIP AVIATOR</h3>
-            <div class="signal-container" id="border-box">
-                <div class="signal-display">
-                    <div id="inner-loader">
-                        <div class="radiant-circle"></div>
-                        <span class="proc-text" id="loader-msg">ANALISANDO...</span>
-                    </div>
-                    <div id="signal-data">
-                        <span style="font-size:12px; font-weight:900; opacity:0.7">SACAR EM (CASH OUT)</span>
-                        <span class="val" id="mult">--.--X</span>
-                        <span id="time" style="font-weight:700">ENTRADA: --:--</span>
-                    </div>
-                </div>
-            </div> 
-            <div class="tentativas-badge">3 TENTATIVAS</div>
-            <p class="instrucoes">Se uma das 3 tentativas ganhar a rodada é considerado vencido.</p>
-            <button class="btn-affiliate" id="btn-bet" onclick="irParaBanca()">APOSTAR AGORA 🚀</button> 
-            <div class="info-row">
-                <div class="info-box"><span class="info-label">Provavel</span><span id="prot-color" style="font-weight:900">---</span></div>
-                <div class="info-box"><span class="info-label">Taxa de Acerto</span><span id="assert-val" style="font-weight:900">94%</span></div>
-            </div> 
-            <div class="btn-group">
-                <button class="btn-win" onclick="votar('win')">ACERTOU ✅</button>
-            </div>
-            <div id="timer-text" style="font-size:11px; color:var(--p); margin-bottom: 15px; font-weight: 800;">AGUARDANDO SERVIDOR...</div> 
-            <div class="stats-footer">
-                <table class="stats-table">
-                    <tr><th colspan="2">RELATÓRIO DE SINAIS</th></tr>
-                    <tr><td class="period-label">Hoje</td><td class="stat-win" id="win-today">+0</td></tr>
-                    <tr><td class="period-label">Semana</td><td class="stat-win" id="win-week">+0</td></tr>
-                    <tr><td class="period-label">Mensal</td><td class="stat-win" id="win-month">+0</td></tr>
-                </table>
-            </div>
+        <div class="step-item">
+            <div class="step-num">2</div>
+            <div><strong>Deposita :</strong> Faça Deposito de 1000Mt para a ativar tua conta e receber o dinhiero.</div>
         </div>
-    </div> 
+        <div class="step-item">
+            <div class="step-num">3</div>
+            <div><strong>Jogue Aviator:</strong> Procura por aviator e clica em apostar, coloca todo valor depositado, espera o avião subir ate no 4x a 5x para receber 5 vezes o o dinheiro depositado.</div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">4</div>
+            <div><strong>Levantamento:</strong> Assim que ganhar pode voltar e clicar no saldo para levantar seus ganhos ou pode continuar jogando para aumentar ainda mais seus Lucro.</div>
+        </div>
+    </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script> 
 
-    <script>
-        const URL_GOOGLE_SHEETS = "https://script.google.com/macros/s/AKfycbyXhSdR5OMeCgcNg4ljsYY81FkZJo7twt1VpPAOUVNgjg7xH4RahQscgAm-HN_9sh5_Dw/exec";
+    <!-- SEÇÃO DE BOTÕES -->
+    <div class="btn-container">
+        <!-- BOTÃO DE DOWNLOAD ORIGINAL -->
+        <div class="btn-wrapper">
+            <a href="https://www.megagamelive.com/affiliates/?btag=2328238" class="btn-download">🚀 CRIAR NOVA CONTA</a>
+        </div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyA3_1btxboCFxCcCJ4EaO4LPOnnYaV6F8o",
-            databaseURL: "https://axnine-45d25-default-rtdb.firebaseio.com",
-            projectId: "axnine-45d25",
-            appId: "1:714660717180:web:86e2467d3b376c6c64188b"
-        }; 
+    
+    </div>
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        const sinalRef = db.ref('sinal_global');
-        const statsRef = db.ref('estatisticas_globais');
-        const onlineRef = db.ref('usuarios_online');
+    <div class="final-warning">
+        ⚠️ <b>REQUISITO:</b> A recompensa de 21000Mt é validada apenas para novos usuários que Criar uma nova conta, deposita 3500mt e aposta uma unica jogada com 3500mt e sacar no 6x receberá instantâneamente 21000mt.
+    </div>
+</div>
 
-        let timerInterval;
-        let isProcessing = false;
-        let serverOffset = 0;
-        let ultimoSinalId = null;
-
-        db.ref(".info/serverTimeOffset").on("value", snap => { serverOffset = snap.val() || 0; });
-        function getNow() { return Date.now() + serverOffset; }
-
-        function showToast(msg) {
-            const t = document.getElementById("toast");
-            t.innerText = msg; t.className = "show";
-            setTimeout(() => { t.className = ""; }, 4000);
-        }
-
-        function verificarPermissaoNotificacao() {
-            if (!("Notification" in window)) return;
-            if (Notification.permission === "default") {
-                Notification.requestPermission();
-            } else if (Notification.permission === "denied") {
-                showToast("ATIVE AS NOTIFICAÇÕES PARA RECEBER OS SINAIS!");
-            }
-        }
-
-        async function acessarSistema() {
-            const nome = document.getElementById('user-name').value.trim();
-            const fone = document.getElementById('user-phone').value.trim();
-
-            if (nome.length < 3 || !/^8[2-7]\d{7}$/.test(fone)) {
-                showToast("DADOS INVÁLIDOS!");
-                return;
-            }
-
-            verificarPermissaoNotificacao();
-            document.getElementById('global-loader').style.display = 'flex';
-
-            try {
-                await fetch(URL_GOOGLE_SHEETS, {
-                    method: "POST", 
-                    mode: "no-cors",
-                    body: JSON.stringify({ 
-                        nome: nome, 
-                        telefone: fone, 
-                        data: new Date().toLocaleString("pt-MZ", {timeZone: "Africa/Maputo"}) 
-                    })
-                });
-            } catch(e) { console.log("Erro sheets:", e); }
-
-            const pRef = onlineRef.push();
-            pRef.set(true);
-            pRef.onDisconnect().remove(); 
-
-            setTimeout(() => {
-                document.getElementById('global-loader').style.display = 'none';
-                document.getElementById('login-overlay').style.display = 'none';
-                document.getElementById('main-content').style.display = 'flex';
-                ouvirSinais();
-            }, 1500);
-        }
-
-        function ouvirSinais() {
-            onlineRef.on('value', s => { document.getElementById('online-count').innerText = s.numChildren(); });
-            
-            statsRef.on('value', s => {
-                const d = s.val() || { wins: 0, losses: 0 };
-                document.getElementById('w').innerText = d.wins;
-                document.getElementById('win-today').innerText = "+" + d.wins;
-            });
-
-            sinalRef.on('value', snap => {
-                const data = snap.val();
-                const agora = getNow();
-                if (!data || agora >= data.expira) {
-                    if (!isProcessing) processarNovoSinal();
-                } else {
-                    isProcessing = false;
-                    atualizarTela(data);
-                }
-            });
-        }
-
-        function processarNovoSinal() {
-            isProcessing = true;
-            document.getElementById('signal-data').style.display = 'none';
-            document.getElementById('inner-loader').style.display = 'flex';
-            let count = 5;
-            const pTimer = setInterval(() => {
-                count--;
-                document.getElementById('loader-msg').innerText = "IDENTIFICANDO... " + count + "s";
-                if(count <= 0) {
-                    clearInterval(pTimer);
-                    gerarSinalFinal();
-                }
-            }, 1000);
-        }
-
-        function gerarSinalFinal() {
-            const agora = getNow();
-            const h = new Date(agora + 60000).getHours().toString().padStart(2,'0') + ":" + new Date(agora + 60000).getMinutes().toString().padStart(2,'0');
-            const random = Math.random();
-            let v = (random > 0.8) ? (Math.random() * 1.5 + 3).toFixed(2) : (random > 0.5 ? (Math.random() * 0.9 + 2).toFixed(2) : (Math.random() * 0.6 + 1.3).toFixed(2));
-            sinalRef.set({ valor: v, hora: h, assert: Math.floor(Math.random() * 6) + 90, expira: agora + 90000 });
-        }
-
-        function atualizarTela(data) {
-            document.getElementById('inner-loader').style.display = 'none';
-            document.getElementById('signal-data').style.display = 'block';
-            document.getElementById('mult').innerText = data.valor + "X";
-            document.getElementById('time').innerText = "ENTRADA: " + data.hora;
-            document.getElementById('assert-val').innerText = data.assert + "%";
-            
-            if (ultimoSinalId !== data.expira) {
-                if ("Notification" in window && Notification.permission === "granted") {
-                    new Notification("🚀 NOVO SINAL AXNINE", {
-                        body: `SAIR EM: ${data.valor}X | HORA: ${data.hora}`,
-                        icon: 'https://cdn-icons-png.flaticon.com/512/732/732200.png'
-                    });
-                }
-                ultimoSinalId = data.expira;
-            }
-
-            const box = document.getElementById('border-box');
-            const prot = document.getElementById('prot-color');
-            if (parseFloat(data.valor) < 2.0) {
-                box.className = "signal-container blue-mode";
-                prot.innerText = "AZUL"; prot.style.color = "var(--blue)";
-            } else {
-                box.className = "signal-container purple-mode";
-                prot.innerText = "ROXA"; prot.style.color = "var(--purple)";
-            }
-            iniciarContagem(data.expira);
-        }
-
-        function iniciarContagem(expira) {
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                const agora = getNow();
-                const restante = Math.max(0, Math.floor((expira - agora) / 1000));
-                document.getElementById('timer-text').innerText = "PRÓXIMO SINAL EM: " + restante + "s";
-                if (restante <= 0 && !isProcessing) processarNovoSinal();
-            }, 1000);
-        }
-
-        function votar(tipo) {
-            statsRef.transaction(a => { if(!a) a = { wins: 0, losses: 0 }; tipo === 'win' ? a.wins++ : a.losses++; return a; });
-            showToast("RESULTADO COMPUTADO!");
-        }
-
-        function irParaBanca() {
-            const btn = document.getElementById('btn-bet');
-            btn.classList.add('btn-loading');
-            setTimeout(() => {
-                btn.classList.remove('btn-loading');
-                window.open("https://www.megagamelive.com/affiliates/?btag=2328238", "_blank");
-            }, 1500);
-        }
-    </script>
 </body>
 </html>
